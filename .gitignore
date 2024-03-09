@@ -1,0 +1,8 @@
+.env
+tests
+.babelrc
+__mocks__
+jest.config.js
+node_modules
+package-lock.json
+prog_rock_monsters.code-workspace
