@@ -3,6 +3,7 @@ name: Scheduled Nostr Post
 on:
   schedule:
     - cron: "0 */6 * * *" # 6時間ごとに実行
+  workflow_dispatch:
 
 jobs:
   build:
