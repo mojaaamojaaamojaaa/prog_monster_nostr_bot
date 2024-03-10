@@ -3,6 +3,7 @@ import axios from "axios";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 import path from "path";
+import { imageIDList } from "../config/imageIDList.js";
 dotenv.config({ path: path.resolve("../../../.env") });
 // Cloudinary の設定
 function configureCloudinary() {
@@ -22,8 +23,8 @@ export async function FetchImageFromCloudinary() {
     try {
         // Cloudinaryの設定を初期化
         configureCloudinary();
-        //画像IDを設定
-        const imageID = "listener_ife0kd";
+        // 画像IDをランダムに選択
+        const imageID = imageIDList[Math.floor(Math.random() * imageIDList.length)];
         // URL を生成
         const imageUrl = cloudinary.v2.url(imageID, { secure: true });
         //cloudinaryから画像ファイルを取得してhash値を計算

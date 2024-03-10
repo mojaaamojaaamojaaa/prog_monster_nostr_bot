@@ -2,7 +2,7 @@ import { relayInit } from "nostr-tools";
 import "websocket-polyfill";
 /**
  * 指定されたNostrリレーURLにイベントを非同期で公開する。
- * 成功した場合はtrueを返し、失敗した場合はfalseを返す。
+ * 成功した場合はtrueを返し、失敗した場合はfalseを返し、接続を閉じる。
  * @param {string} relayUrl イベントを公開するNostrリレーのURL
  * @param {object} event Nostrイベントオブジェクト
  * @returns {Promise<boolean>} イベントの公開が成功したかどうかを示すPromise。

@@ -1,6 +1,6 @@
 import { VerifiedEvent } from "nostr-tools";
 import { ComposePostToNostr } from "../class/ComposePostToNostr.js";
-import { Config } from "../config.js";
+import { Config } from "../config/config.js";
 import { publishEventToRelay } from "./publishEventToRelay.js";
 
 /**
@@ -35,17 +35,27 @@ export async function postToNostr(imageUrl: string, hash: string) {
       publishEventToRelay(relayUrl, event)
     );
 
-    // すべてのプロミスが解決するのを待つ
-    const results = await Promise.allSettled(publishPromises);
-    // 接続の成功と失敗のカウント
-    // prettier-ignore
-    const successCount = results.filter((result) => result.status === "fulfilled").length;
-    // prettier-ignore
-    const failureCount = results.filter((result) => result.status === "rejected").length;
+    //以下は公開成功と失敗のカウント(debug用)
 
-    // 結果の表示
+    //すべてのプロミスが解決するのを待つ
+    const results = await Promise.allSettled(publishPromises);
+
+    const { successCount, failureCount } = results.reduce(
+      (acc, result) => {
+        if (result.status === "fulfilled" && result.value === true) {
+          //接続に成功かつ投稿が成功した時のみsuccess
+          acc.successCount++;
+        } else {
+          //それ以外のすべてのケースを失敗とカウント
+          acc.failureCount++;
+        }
+        return acc;
+      },
+      { successCount: 0, failureCount: 0 }
+    );
+
     console.log(
-      `Event publishing results: ${successCount} successful, ${failureCount} failed.`
+      `Success Count: ${successCount}, Failure Count: ${failureCount}`
     );
   } catch (error) {
     // エラー処理

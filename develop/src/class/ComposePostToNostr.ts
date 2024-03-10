@@ -1,4 +1,4 @@
-import { Config } from "../config.js";
+import { Config } from "../config/config.js";
 import { currUnixtime } from "../util/util.js";
 import { VerifiedEvent, finishEvent, getPublicKey } from "nostr-tools";
 
@@ -19,7 +19,7 @@ export class ComposePostToNostr {
     // prettier-ignore
     const event = {
       "pubkey" : pubkey,
-      "content" : `Test,get the Picture from Cloudinary ${imageUrl}`,
+      "content" : `${imageUrl}`,
       "kind" : 1,
       "tags" : [
         [
