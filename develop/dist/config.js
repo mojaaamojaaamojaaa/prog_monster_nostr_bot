@@ -7,7 +7,6 @@ export var Config;
     //Postする際のrelay serverの配列
     Config.relayURLs = [
         "wss://relay.damus.io",
-        "wss://yabu.me",
         "wss://relay-jp.nostr.wirednet.jp",
     ];
 })(Config || (Config = {}));

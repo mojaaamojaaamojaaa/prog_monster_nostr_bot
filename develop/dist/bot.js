@@ -11,5 +11,5 @@ async function main() {
     }
 }
 main();
-//3時間ごとに実行
-setInterval(main, 3 * 60 * 60 * 1000);
+//3時間ごとに実行<-もしかしたら使うかも？？？
+//setInterval(main, 3 * 60 * 60 * 1000);

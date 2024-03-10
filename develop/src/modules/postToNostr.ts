@@ -57,14 +57,11 @@ export async function postToNostr(imageUrl: string, hash: string) {
       publishEventToRelay(relayUrl, event)
     );
 
-    try {
-      // すべてのプロミスが解決するのを待つ
-      await Promise.allSettled(publishPromises);
-      console.log("All events successfully published.");
-      lastPublishTime = now; //すべて成功した場合のみ更新
-    } catch (error) {
-      console.error("Error publishing to one or more relays:", error); //一つでも失敗した場合はこちらにくる
-    }
+    // すべてのプロミスが解決するのを待つ
+    await Promise.allSettled(publishPromises);
+
+    // 最後の公開時刻を更新（成功・失敗に関わらず）
+    lastPublishTime = now;
   } catch (error) {
     // エラー処理
     console.error("Error creating or publishing event:", error);

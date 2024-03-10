@@ -9,7 +9,6 @@ export namespace Config {
   //Postする際のrelay serverの配列
   export const relayURLs: string[] = [
     "wss://relay.damus.io",
-    "wss://yabu.me",
     "wss://relay-jp.nostr.wirednet.jp",
   ];
 }

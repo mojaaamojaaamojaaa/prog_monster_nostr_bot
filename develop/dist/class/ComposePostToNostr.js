@@ -24,7 +24,6 @@ export class ComposePostToNostr {
                     "imeta",
                     `url ${imageUrl}`,
                     "m image/jpeg",
-                    "dim 600x600",
                     "alt An example photo hosted on Cloudinary",
                     `x ${hash}`,
                 ]
