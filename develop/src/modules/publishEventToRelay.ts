@@ -23,5 +23,9 @@ export const publishEventToRelay = async (
   } catch (error) {
     console.error(`Failed to publish event to ${relayUrl}:`, error);
     return false;
+  } finally {
+    // イベントの公開が成功または失敗した後、接続を閉じる
+    await relay.close();
+    console.log(`Disconnected from ${relayUrl}`);
   }
 };
