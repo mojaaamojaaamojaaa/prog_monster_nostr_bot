@@ -3,12 +3,6 @@ import { ComposePostToNostr } from "../class/ComposePostToNostr.js";
 import { Config } from "../config.js";
 import { publishEventToRelay } from "./publishEventToRelay.js";
 
-//最後にイベントを公開した時刻を追跡する変数
-let lastPublishTime: number = 0;
-
-//クールタイムを三時間（10800秒）に設定
-const COOL_TIME_DUR_SEC: number = 10800;
-
 /**
  * Nostrプロトコルを使用してイベントを公開する関数。
  * 特定の画像URLを含むイベントを作成し、設定された全リレーに対して公開試みを行う。
@@ -25,22 +19,6 @@ const COOL_TIME_DUR_SEC: number = 10800;
 
 export async function postToNostr(imageUrl: string, hash: string) {
   try {
-    //現在時刻を取得
-    const now: number = Math.floor(Date.now() / 1000); // 秒単位
-
-    //最後にイベントを公開してからの経過時間を計算
-    const elapsedTime: number = now - lastPublishTime;
-
-    //クールタイム内であれば、イベントの公開を中止
-    if (elapsedTime < COOL_TIME_DUR_SEC) {
-      console.log(
-        `Cooling Down.Please wait ${
-          COOL_TIME_DUR_SEC - elapsedTime
-        } more seconds.`
-      );
-      return;
-    }
-
     //ComposePostToNostrクラスのインスタンスを作成
     const composer: ComposePostToNostr = new ComposePostToNostr();
 
@@ -58,10 +36,17 @@ export async function postToNostr(imageUrl: string, hash: string) {
     );
 
     // すべてのプロミスが解決するのを待つ
-    await Promise.allSettled(publishPromises);
+    const results = await Promise.allSettled(publishPromises);
+    // 接続の成功と失敗のカウント
+    // prettier-ignore
+    const successCount = results.filter((result) => result.status === "fulfilled").length;
+    // prettier-ignore
+    const failureCount = results.filter((result) => result.status === "rejected").length;
 
-    // 最後の公開時刻を更新（成功・失敗に関わらず）
-    lastPublishTime = now;
+    // 結果の表示
+    console.log(
+      `Event publishing results: ${successCount} successful, ${failureCount} failed.`
+    );
   } catch (error) {
     // エラー処理
     console.error("Error creating or publishing event:", error);
