@@ -21,15 +21,15 @@ function configureCloudinary() {
  */
 export async function FetchImageFromCloudinary() {
     try {
-        // Cloudinaryの設定を初期化
+        //Cloudinaryの設定を初期化
         configureCloudinary();
-        // 画像IDをランダムに選択
+        //画像IDをランダムに選択
         const imageID = imageIDList[Math.floor(Math.random() * imageIDList.length)];
-        // URL を生成
+        //URLを生成
         const imageUrl = cloudinary.v2.url(imageID, { secure: true });
         //cloudinaryから画像ファイルを取得してhash値を計算
         const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
-        //画像のBinary Data
+        //画像のBinary Dataを取得
         const imageBuffer = response.data;
         const hash = createHash("sha256").update(imageBuffer).digest("hex");
         return { imageUrl, hash };

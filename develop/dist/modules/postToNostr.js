@@ -4,7 +4,6 @@ import { publishEventToRelay } from "./publishEventToRelay.js";
 /**
  * Nostrプロトコルを使用してイベントを公開する関数。
  * 特定の画像URLを含むイベントを作成し、設定された全リレーに対して公開試みを行う。
- * この関数は、最後の公開から一定のクールダウン期間（3時間）が経過している場合にのみイベントを公開する。
  * 公開成功時には最後の公開時刻が更新される。
  *
  * @async
@@ -20,9 +19,8 @@ export async function postToNostr(imageUrl, hash) {
         const composer = new ComposePostToNostr();
         //composeEventメソッドを使用してイベントを作成
         const event = await composer.composeEvent(imageUrl, hash);
-        //relayURLを取得
+        //relayURLを取得して送信
         const relayUrls = Config.relayURLs;
-        //relayURLをpublishEventToRelay関数で送信
         const publishPromises = relayUrls.map((relayUrl) => publishEventToRelay(relayUrl, event));
         //以下は公開成功と失敗のカウント(debug用)
         //すべてのプロミスが解決するのを待つ
@@ -33,7 +31,6 @@ export async function postToNostr(imageUrl, hash) {
                 acc.successCount++;
             }
             else {
-                //それ以外のすべてのケースを失敗とカウント
                 acc.failureCount++;
             }
             return acc;
@@ -41,7 +38,6 @@ export async function postToNostr(imageUrl, hash) {
         console.log(`Success Count: ${successCount}, Failure Count: ${failureCount}`);
     }
     catch (error) {
-        // エラー処理
         console.error("Error creating or publishing event:", error);
     }
 }

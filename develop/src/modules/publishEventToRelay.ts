@@ -8,10 +8,10 @@ import "websocket-polyfill";
  * @returns {Promise<boolean>} イベントの公開が成功したかどうかを示すPromise。
  * @throws 通信エラーやリレーからの応答の失敗など、イベントの公開中に発生したエラーをキャッチしてコンソールに表示
  */
-export const publishEventToRelay = async (
+export async function publishEventToRelay(
   relayUrl: string,
   event: VerifiedEvent
-) => {
+) {
   const relay = relayInit(relayUrl);
   try {
     //relayに接続
@@ -24,8 +24,8 @@ export const publishEventToRelay = async (
     console.error(`Failed to publish event to ${relayUrl}:`, error);
     return false;
   } finally {
-    // イベントの公開が成功または失敗した後、接続を閉じる
+    //イベントの公開が成功または失敗した後、接続を閉じる
     await relay.close();
     console.log(`Disconnected from ${relayUrl}`);
   }
-};
+}

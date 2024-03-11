@@ -1,24 +1,16 @@
-import { Config } from "../config/config.js";
-import { currUnixtime } from "../util/util.js";
-import { VerifiedEvent, finishEvent, getPublicKey } from "nostr-tools";
+import { UnsignedEvent } from "nostr-tools";
+import { BaseNostrEvent } from "./BaseNostrEvent.js";
 
-export class ComposePostToNostr {
-  private sk: string; //Secret Key
-  constructor() {
-    this.sk = Config.BOT_SECRET_KEY;
-  }
-
+export class ComposePostToNostr extends BaseNostrEvent {
   /**
    * テキスト投稿イベントを作成
    * @param {string} imageUrl tagに記入するための画像URL
    * @param {string} imageUrl tagに記入するためのhash値
    * @returns {VerifiedEvent<number>} 署名されたイベントオブジェクト
    */
-  public composeEvent(imageUrl: string, hash: string): VerifiedEvent<number> {
-    const pubkey = getPublicKey(this.sk);
+  public composeEvent(imageUrl: string, hash: string) {
     // prettier-ignore
-    const event = {
-      "pubkey" : pubkey,
+    const event:UnsignedEvent = {
       "content" : `${imageUrl}`,
       "kind" : 1,
       "tags" : [
@@ -30,9 +22,10 @@ export class ComposePostToNostr {
           `x ${hash}`,
         ]
       ],
-      "created_at" : currUnixtime(),
+      "created_at" : this.getCurrentUnixTime(),
+      "pubkey" : this.pubkey,
     };
-    //イベントIDの計算・署名
-    return finishEvent(event, this.sk);
+
+    return this.signEvent(event);
   }
 }
