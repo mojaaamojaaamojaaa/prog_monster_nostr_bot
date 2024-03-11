@@ -6,8 +6,8 @@ async function main() {
     const relayURL = Config.relayURLs[1];
     const subscribe = new RelaySubscribe(relayURL);
     await subscribe.init();
-  } catch (err) {
-    console.error("Error handling event:", err);
+  } catch (error) {
+    console.error("Error handling event:", error);
   }
 }
 
