@@ -1,0 +1,1 @@
+Cloudinaryを利用してnostrの特定のリレーに投稿するbot。
